@@ -1,0 +1,13 @@
+.verify-result-content {
+  .label-text {
+    font-weight: bold;
+
+    @media screen and (min-width: 768px) {
+      text-align: right;
+    }
+  }
+
+  .row {
+    margin-bottom: 10px;
+  }
+}

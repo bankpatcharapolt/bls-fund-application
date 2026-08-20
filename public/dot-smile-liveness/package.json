@@ -1,0 +1,93 @@
+{
+  "_from": "@innovatrics/dot-smile-liveness@^7.2.1",
+  "_id": "@innovatrics/dot-smile-liveness@7.5.0",
+  "_inBundle": false,
+  "_integrity": "sha512-N6PRShFsKZ7B6pV7YVod9oy4afzmTk/8X7tB22YIRmJUDgwOFXkkFymE9ZUDd6ubkYjnxa7uSrOdR0PPDarizA==",
+  "_location": "/@innovatrics/dot-smile-liveness",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@innovatrics/dot-smile-liveness@^7.2.1",
+    "name": "@innovatrics/dot-smile-liveness",
+    "escapedName": "@innovatrics%2fdot-smile-liveness",
+    "scope": "@innovatrics",
+    "rawSpec": "^7.2.1",
+    "saveSpec": null,
+    "fetchSpec": "^7.2.1"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@innovatrics/dot-smile-liveness/-/dot-smile-liveness-7.5.0.tgz",
+  "_shasum": "15549c8beb9855deaae14963709530c3a8f9dfd9",
+  "_spec": "@innovatrics/dot-smile-liveness@^7.2.1",
+  "_where": "D:\\bls-fund-apply-application",
+  "bugs": {
+    "url": "https://github.com/innovatrics/dot-js-kit/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@preact/signals": "^2.0.4",
+    "comlink": "^4.4.2",
+    "preact": "^10.26.6",
+    "preact-custom-element": "^4.3.0",
+    "styled-components": "^6.1.18"
+  },
+  "deprecated": false,
+  "description": "Digital onboarding semi-passive liveness",
+  "exports": {
+    ".": {
+      "types": "./common/src/types/smile.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.umd.js"
+    },
+    "./events": {
+      "types": "./smile/src/events.d.ts",
+      "import": "./events.mjs",
+      "require": "./events.umd.js"
+    }
+  },
+  "homepage": "https://developers.innovatrics.com/digital-onboarding/technical/remote/dot-web-smile-liveness/latest/documentation/",
+  "keywords": [
+    "semi-passive liveness",
+    "capture",
+    "identity",
+    "camera",
+    "video"
+  ],
+  "license": "Innovatrics proprietary license",
+  "name": "@innovatrics/dot-smile-liveness",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/innovatrics/dot-js-kit.git"
+  },
+  "scripts": {
+    "build": "tsc && pnpm build:smile && pnpm build:events && pnpm build:types",
+    "build:events": "LIB=events vite build",
+    "build:pack": "pnpm build && cd dist && pnpm pack --pack-destination ../",
+    "build:smile": "LIB=smile vite build",
+    "build:types": "tsc --project tsconfig.production.json && tsc-alias -p tsc-alias.json",
+    "build:watch": "pnpm build --watch",
+    "bump:version": "npm pkg set version=$VERSION",
+    "dev": "vite",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest run --passWithNoTests",
+    "tsc": "tsc",
+    "update:changelog": "../../scripts/update-changelog.sh"
+  },
+  "types": "common/src/types/smile.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "common/src/types/smile.d.ts"
+      ],
+      "events": [
+        "smile/src/events.d.ts"
+      ]
+    }
+  },
+  "version": "7.5.0"
+}

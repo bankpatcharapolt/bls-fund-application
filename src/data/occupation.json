@@ -1,0 +1,20 @@
+{
+    "datas": [
+        { "code": "01", "title_th": "เกษตรกร", "title_en": "Agriculturist" },
+        { "code": "02", "title_th": "พระภิกษุ / นักบวช", "title_en": "Buddhist Monk / Priest" },
+        { "code": "03", "title_th": "เจ้าของกิจการ / ธุรกิจส่วนตัว", "title_en": "Business Owner" },
+        { "code": "04", "title_th": "พนักงานบริษัท", "title_en": "Corporate Employee" },
+        { "code": "05", "title_th": "แพทย์ / พยาบาล", "title_en": "Doctor / Nurse" },
+        { "code": "06", "title_th": "กิจการครอบครัว", "title_en": "Family Business" },
+        { "code": "07", "title_th": "ข้าราชการ", "title_en": "Government Employee" },
+        { "code": "08", "title_th": "แม่บ้าน / พ่อบ้าน", "title_en": "Housewife" },
+        { "code": "09", "title_th": "นักลงทุน", "title_en": "Investor" },
+        { "code": "10", "title_th": "นักการเมือง", "title_en": "Politician" },
+        { "code": "11", "title_th": "เกษียณอายุ", "title_en": "Retirement" },
+        { "code": "12", "title_th": "อาชีพอิสระ", "title_en": "Self-Employed" },
+        { "code": "13", "title_th": "พนักงานรัฐวิสาหกิจ", "title_en": "State Enterprise Employee" },
+        { "code": "14", "title_th": "นักเรียน / นักศึกษา", "title_en": "Student" },
+        { "code": "15", "title_th": "ครู / อาจารย์", "title_en": "Teacher" },
+        { "code": "00", "title_th": "อื่นๆ", "title_en": "Other" }
+    ]
+}

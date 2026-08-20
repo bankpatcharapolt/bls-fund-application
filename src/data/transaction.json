@@ -1,0 +1,11 @@
+{ "data":[
+    {"code":"SUB", "name_th":"ซื้อหน่วยลงทุน", "name_en":"", "short_th":"ซื้อ", "short_en":"Buy"},
+    {"code":"RED", "name_th":"ขายคืนหน่วยลงทุน", "name_en":"", "short_th":"ขาย", "short_en":"Sell"},
+    {"code":"SWO", "name_th":"สับเปลี่ยนออกภายใน บลจ.เดียวกัน", "name_en":"", "short_th":"สับเปลี่ยนออกภายใน บลจ.", "short_en":"Switching Out"},
+    {"code":"SWI", "name_th":"สับเปลี่ยนเข้าภายใน บลจ. เดียวกัน", "name_en":"", "short_th":"สับเปลี่ยนเข้าภายใน บลจ.", "short_en":"Switching In"},
+    {"code":"XSO", "name_th":"สับเปลี่ยนออกต่าง บลจ.", "name_en":"", "short_th":"สับเปลี่ยนออกต่าง บลจ.", "short_en":"External Switching Out"},
+    {"code":"XSI", "name_th":"สับเปลี่ยนเข้าต่าง บลจ.", "name_en":"", "short_th":"สับเปลี่ยนเข้าต่าง บลจ.", "short_en":"External Switching In"},
+    {"code":"TRI", "name_th":"โอนหน่วยเข้า", "name_en":"", "short_th":"โอนหน่วยเข้า", "short_en":"Transfer In"},
+    {"code":"TRO", "name_th":"โอนหน่วยออก", "name_en":"", "short_th":"โอนหน่วยออก", "short_en":"Transfer Out"}
+]
+}

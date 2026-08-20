@@ -1,0 +1,69 @@
+{
+	"name": "bls-fund-application",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"start": "vue-cli-service serve",
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build --target lib --name BlsFundApplication --filename bls-fund-application ./src/containers/BlsFundApplication.vue --dest=dist/prod",
+		"build:staging": "vue-cli-service build --mode staging --target lib --name BlsFundApplication --filename bls-fund-application ./src/containers/BlsFundApplication.vue --dest=dist/staging",
+		"build:app": "vue-cli-service build",
+		"lint": "vue-cli-service lint"
+	},
+	"dependencies": {
+		"@innovatrics/dot-auto-capture-ui": "^7.2.1",
+		"@innovatrics/dot-document-auto-capture": "^7.2.1",
+		"@innovatrics/dot-face-auto-capture": "^7.2.1",
+		"@innovatrics/dot-magnifeye-liveness": "^7.2.1",
+		"@innovatrics/dot-palm-capture": "^7.2.1",
+		"@innovatrics/dot-smile-liveness": "^7.2.1",
+		"await-to-js": "^2.1.1",
+		"axios": "^0.19.2",
+		"core-js": "^3.6.5",
+		"cropperjs": "^1.5.7",
+		"file-saver": "^2.0.5",
+		"jimp": "^0.16.1",
+		"lodash": "^4.17.19",
+		"moment": "^2.27.0",
+		"numeral": "^2.0.6",
+		"sass": "^1.54.8",
+		"sweetalert2": "^9.17.0",
+		"uiv": "^0.36.0",
+		"vue": "^2.6.11",
+		"vue-cropperjs": "^4.1.0",
+		"vue-i18n": "^8.25.0",
+		"vue-ladda": "0.0.15",
+		"vuelidate": "^0.7.5",
+		"vue-the-mask": "^0.11.1",
+		"vue-web-cam": "^1.9.0"
+	},
+	"devDependencies": {
+		"babel-eslint": "^10.1.0",
+		"eslint": "^6.7.2",
+		"eslint-plugin-vue": "^6.2.2",
+		"sass-loader": "^10.1.1",
+		"@vue/cli-plugin-babel": "~4.4.0",
+		"@vue/cli-plugin-eslint": "~4.4.0",
+		"@vue/cli-service": "~4.4.0",
+		"vue-template-compiler": "^2.6.11"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/essential",
+			"eslint:recommended"
+		],
+		"parserOptions": {
+			"parser": "babel-eslint"
+		},
+		"rules": {}
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not dead"
+	]
+}

@@ -1,0 +1,20 @@
+{
+    "datas":[
+        {"code":"01", "title_en":"Antique Trading", "title_th":"ค้าของเก่า / วัตถุโบราณ"},
+        {"code":"02", "title_en":"Armament", "title_th":"อาวุธยุทธภัณฑ์"},
+        {"code":"03", "title_en":"Casino / Gambling", "title_th":"คาสิโน / การพนัน"},
+        {"code":"04", "title_en":"Co-operative / Foundation / Association / Club / Temple / Mosque", "title_th":"สหกรณ์ / มูลนิธิ / สมาคม / สโมสร / วัด / มัสยิด"},
+        {"code":"05", "title_en":"Domestic or International Money Transfer", "title_th":"โอนและรับโอนเงินทั้งภายในและต่างประเทศ"},
+        {"code":"06", "title_en":"Entertainment Business", "title_th":"สถานบริการตามกฏหมายว่าด้วยสถานบริการ"},
+        {"code":"07", "title_en":"Financial Service / Banking", "title_th":"การเงิน / ธนาคาร"},
+        {"code":"08", "title_en":"Foreign Currency Exchange", "title_th":"แลกเปลี่ยนเงินตราต่างประเทศ"},
+        {"code":"09", "title_en":"Hotel / Restaurant", "title_th":"โรงแรม / ภัตตาคาร"},
+        {"code":"10", "title_en":"Insurance / Assurance", "title_th":"ประกันภัย / ประกันชีวิต"},
+        {"code":"11", "title_en":"Jewelry / Gold Trading", "title_th":"ค้าอัญมณี"},
+        {"code":"12", "title_en":"Property / Real Estate", "title_th":"อสังหาริมทรัพย์"},
+        {"code":"13", "title_en":"Recruitment Agency", "title_th":"นายหน้าจัดหางาน"},
+        {"code":"14", "title_en":"Travel Industry / Travel Agency", "title_th":"ธุรกิจนำเที่ยว / บริษัททัวร์"},
+        {"code":"15", "title_en":"University / School / Education Center", "title_th":"มหาวิทยาลัย / โรงเรียน / สถานศึกษา"},
+        {"code":"00", "title_en":"Other", "title_th":"อืนๆ"}
+    ]
+}

@@ -1,0 +1,10 @@
+{"data": [
+    {"code": "1", "name_en":"", "name_th":"เงินเดือน"},
+    {"code": "2", "name_en":"", "name_th":"เงินออม"},
+    {"code": "3", "name_en":"", "name_th":"เงินเกษียณ"},
+    {"code": "4", "name_en":"", "name_th":"มรดก"},
+    {"code": "5", "name_en":"", "name_th":"การลงทุน"},
+    {"code": "6", "name_en":"", "name_th":"ประกอบธุรกิจ"},
+    {"code": "7", "name_en":"", "name_th":"อื่นๆ"}
+]
+}
