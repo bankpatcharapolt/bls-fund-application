@@ -31,6 +31,7 @@
             :agreement-text="omnibusAgreementText"
             @segigate-apply="onClickSegigateApply()"
             :identify-config="identifyConfig"
+            :verify-identity-config="verifyIdentityConfig"
             
           >
             <!-- Omnibus Application Form -->
@@ -40,7 +41,13 @@
       <!-- End Omnibus -->
 
       <!-- Segigate -->
-      <template v-if="(displayMode === 'segigate' || displayMode === 'omnandseg') && !isWebview">
+      <!--
+        add on : requirment - เดิม segigate/omn+seg ผ่าน webview จะถูกบล็อกทั้งหมด (isWebview) ขึ้นข้อความ
+        ให้ไปใช้เว็บเต็มแทน (error-page.segregate-webview) - requirment ใหม่ยกเลิกข้อจำกัดนี้แล้ว (ไม่แยก
+        website/webview อีกต่อไป) เปลี่ยนเป็นเงื่อนไขเดียว: ต้องยืนยันตัวตนผ่านเว็บใหม่ก่อน (verifyIdentityConfig)
+        ไม่ว่าจะเข้าผ่าน website หรือ webview ก็ตาม - ตัด && !isWebview ออกจากบรรทัดนี้แล้ว
+      -->
+      <template v-if="displayMode === 'segigate' || displayMode === 'omnandseg'">
         <template
           v-if="segigateData && [1, 2, 7].includes(segigateData.currentStatus)"
         >
@@ -55,8 +62,26 @@
             <!-- Segigate Pre Form -->
           </segigate-pre-form>
 
+          <!--
+            add on : requirment - หน้า blocking ใหม่ แสดงแทน segigate-application-form 
+          -->
+          <div
+            v-if="!showSegigatePreForm && !verifyIdentityConfig.verified"
+            class=""
+          >
+          <!-- container-fluid verify-identity-required-page-->
+          <!--
+            <div class="verify-identity-required-page__icon">
+              <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
+            </div>
+          -->
+            <p class="verify-identity-required-page__text">
+              {{ $t('error-page.verify-identity-required') }}
+            </p>
+          </div>
+
           <segigate-application-form
-            v-if="!showSegigatePreForm"
+            v-if="!showSegigatePreForm && verifyIdentityConfig.verified"
             :display-values="displayValues"
             :values="segigateData"
             :suitability="suitability"
@@ -65,16 +90,11 @@
             :crsData="crsData"
             :identify-config="identifyConfig"
             :ndid-config="ndidConfig"
+            :verify-identity-config="verifyIdentityConfig"
             :is-omn-and-seg="displayMode === 'omnandseg'"
           >
           </segigate-application-form>
         </template>
-      </template>
-
-      <template v-if="(displayMode === 'segigate' || displayMode === 'omnandseg') && isWebview">
-        <div class="application-text container-fluid">
-          <p v-html="$t('error-page.segregate-webview')"></p>
-        </div>
       </template>
       <!-- End Segigate -->
 
@@ -213,9 +233,18 @@ export default {
     // add on : requirment - ndidConfig รับค่าจาก popup ยืนยันตัวตนผ่าน NDID (bls-ndid-verify) ที่ blsport
     // sync เข้ามา (ดู bus.$on('ndid-config-updated', ...) ใน fund-application-new_blade.php)
     // ส่งต่อให้ segigate-application-form ใช้เช็คเงื่อนไขปุ่ม "ถัดไป" ใน step 2
+    // หมายเหตุ (requirment ใหม่) : ไม่ได้ใช้เป็นเงื่อนไขหลักแล้ว เปลี่ยนไปใช้ verifyIdentityConfig ด้านล่างแทน
+    // แต่ยังคง prop นี้ไว้ ไม่ได้ลบ (ดูเหตุผลใน README ที่แนบมา)
     ndidConfig: {
         type: Object,
         default: () => ({})
+    },
+    // add on : requirment - เว็บยืนยันตัวตนใหม่ (แทนที่ bls identify application เดิมทั้ง 3 จุด: PreForm accept
+    // ของ segigate/omn+seg, ปุ่ม "ยันยันตัวตน" ของ omnibus ล้วนๆ, ปุ่มยืนยันตัวตนใน step 2 ของ omn+seg)
+    // sync เข้ามาจาก blade ผ่าน bus.$on('verify-identity-config-updated', ...) เหมือน identifyConfig/ndidConfig
+    verifyIdentityConfig: {
+        type: Object,
+        default: () => ({ verified: false })
     },
     suitability: {
       type: Object,
@@ -360,7 +389,27 @@ export default {
          this.showSegigatePreForm = segigateData.isNewApply;
          // this.showSegigatePreForm = true; // TODO : REMOVE THIS LINE ON PRODUCTION
           this.segigateData = { ...segigateData };
+          // add on : requirment - "เข้ามาในหน้าเปิดบัญชี omn+seg ในstep1" ครอบคลุมกรณีนี้ด้วย: ถ้าไม่ใช่ใบสมัคร
+          // ใหม่ (isNewApply=false) จะไม่เห็น PreForm เลย ไปที่ ApplicationForm (step1) ตรงๆ - ต้องเช็ค/trigger
+          // ยืนยันตัวตนตรงนี้ด้วย เพราะ onClickStartSegigate (ทริกเกอร์ตอนกด PreForm accept) จะไม่ถูกเรียกในเคสนี้
+          if (!segigateData.isNewApply) {
+            this.checkAndTriggerVerifyIdentity();
+          }
         }
+      }
+    },
+
+    // add on : requirment - เช็คสถานะยืนยันตัวตน (verifyIdentityConfig.verified) ถ้ายังไม่เคยยืนยัน ให้เปิด
+    // เว็บยืนยันตัวตนใหม่ (new tab / external browser แล้วแต่ website/webview) ครั้งเดียว ใช้ร่วมกันทั้งจุดที่
+    // กด "ยอมรับ" ใน PreForm (onClickStartSegigate) และจุดที่เข้า step1 ตรงๆ (loadData ด้านบน)
+    checkAndTriggerVerifyIdentity() {
+      if (this.verifyIdentityConfig && this.verifyIdentityConfig.verified) {
+        return;
+      }
+      if (window.onClickShowVerifyIdentityWebsite) {
+        window.onClickShowVerifyIdentityWebsite();
+      } else {
+        console.warn("onClickShowVerifyIdentityWebsite is not loaded yet.");
       }
     },
 
@@ -375,16 +424,11 @@ export default {
 
     // add on : requirment - หลังลูกค้ากด "ยอมรับและเปิดเลขที่ผู้ถือหน่วยเฉพาะ..." ในหน้า pre-form ของ
     // segigate (ครอบคลุมทั้ง mode segigate และ omnandseg เพราะใช้ pre-form/application-form ร่วมกัน)
-    // ให้ปิด pre-form แล้วขึ้น popup ยืนยันตัวตน (ถ่ายบัตร + DOPA) ทันที ก่อนเข้าหน้า ApplicationForm
-    // เดิม auto-trigger ตัวนี้เคยอยู่ที่ fund-application-new_blade.php (ยิงทันทีตอนโหลดหน้า) แต่ requirment
-    // เปลี่ยนมาให้รอจนกว่าจะกดยอมรับก่อน จึงย้ายมาไว้ตรงนี้แทน
+    // เดิมเคยเปิด popup bls identify application (DOPA+OCR) ตรงนี้ - requirment ใหม่เลิกใช้แล้ว
+    // เปลี่ยนเป็นเช็ค/เปิดเว็บยืนยันตัวตนใหม่แทน (ผ่าน checkAndTriggerVerifyIdentity ด้านบน ใช้ร่วมกับ loadData)
     onClickStartSegigate() {
       this.showSegigatePreForm = false;
-      if (window.onclickShowIdentifyApp) {
-        window.onclickShowIdentifyApp("0");
-      } else {
-        console.warn("onclickShowIdentifyApp is not loaded yet.");
-      }
+      this.checkAndTriggerVerifyIdentity();
     },
 
     scrollToTop() {
@@ -412,5 +456,6 @@ export default {
   @import "./../assets/scss/button";
   @import "./../assets/scss/loading";
   @import "./../assets/scss/verify-result-content";
+  @import "./../assets/scss/verify-identity";
 }
 </style>

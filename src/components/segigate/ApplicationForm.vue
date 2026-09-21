@@ -1226,21 +1226,21 @@
               >ยันยันตัวตน</label
             >
             <div class="col-sm-7 col-sm-6">
+              <!--
+                add on : requirment - เลิกใช้ popup NDID เดิม (bls-ndid-verify / ndidConfig.ndidVerifySuccess)
+                เปลี่ยนไปเช็ค verifyIdentityConfig.verified (เว็บยืนยันตัวตนใหม่) แทน คงชื่อ isNdidVerifySuccess/
+                onClickVerifyNDID ไว้เหมือนเดิมเพื่อลดความเสี่ยง (ดู computed/method ด้านล่างของไฟล์)
+                ตัดคำว่า NDID/ThaID ออกจาก wording เพราะไม่ทราบแน่ชัดว่าเว็บใหม่นี้เสนอช่องทางอะไรบ้าง
+              -->
               <div class="upload-status-container">
-                <!--
-                  add on : requirment (SA แจ้งเพิ่ม - ให้ข้อความสื่อว่ายืนยันตัวตนดิจิทัลได้หลายช่องทาง
-                  ไม่ใช่ NDID อย่างเดียว) เปลี่ยน wording จากที่เจาะจง "NDID" เป็น "ยืนยันตัวตนดิจิทัล
-                  (NDID/ThaID)" แทน - แก้แค่ข้อความในไฟล์นี้เท่านั้น ไม่ได้แก้อะไรใน bls-ndid-verify
-                  (popup ที่เรียกอยู่ยังเป็นตัวเดิม ยังไม่มีให้เลือกวิธีจริงข้างในฝั่ง popup)
-                  เงื่อนไข isNdidVerifySuccess (ชื่อ property เดิม) ยังใช้ตัวเดิม ไม่ได้เปลี่ยน
-                -->
+               
                 <span
                   class="info-text success"
                   style="font-weight: bold"
                  v-if="this.isNdidVerifySuccess"
                 >
                   <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
-                  ยืนยันตัวตนดิจิทัล (NDID/ThaID) เรียบร้อยแล้ว
+                  ยืนยันตัวตนเรียบร้อยแล้ว
                 </span>
                 <span
                   class="info-text danger"
@@ -1251,19 +1251,10 @@
                     class="glyphicon glyphicon-remove"
                     aria-hidden="true"
                   ></i>
-                  กรุณายืนยันตัวตนดิจิทัล (NDID/ThaID)
+                  กรุณายืนยันตัวตนดิจิทัล
                 </span>
               </div>
-              <!--
-                add on : requirment (SA แจ้งเพิ่ม) - เปลี่ยนข้อความปุ่มจาก "การยืนยันตัวตนรูปแบบดิจิทัลผ่าน NDID"
-                (เจาะจง NDID อย่างเดียว) เป็นข้อความที่สื่อว่ายืนยันตัวตนดิจิทัลได้หลายช่องทาง (NDID/ThaID)
-                ตามที่ SA แจ้ง - แก้เฉพาะข้อความในไฟล์นี้ ไม่ได้แตะ bls-ndid-verify (popup เดิมที่เรียกอยู่
-                ยังทำงานเหมือนเดิมทุกอย่าง แค่ยังไม่มีให้เลือกวิธีจริงข้างในฝั่ง popup)
-                ปุ่ม/method เรียก onClickVerifyNDID เหมือนเดิม (ไม่ได้เปลี่ยนชื่อ เพราะยังเรียก
-                window.onClickShowNdidVerify ตัวเดิม)
-                เมื่อยืนยันสำเร็จแล้ว (isNdidVerifySuccess) จะไม่แสดงปุ่มนี้อีก - กดดูข้อมูล/ยืนยันซ้ำไม่ได้
-                ตามที่ตกลงกัน ข้อความสถานะด้านบน (upload-status-container) จะบอกว่ายืนยันแล้วแทน
-              -->
+            
               <button
                 type="button"
                 class="btn btn-labeled btn-primary"
@@ -1276,7 +1267,7 @@
                     aria-hidden="true"
                   ></i>
                 </span>
-                ยืนยันตัวตนดิจิทัล (NDID/ThaID)
+                ยืนยันตัวตนดิจิทัล
               </button>
             </div>
             </div>
@@ -2148,9 +2139,17 @@ export default {
     // add on : requirment - ndidConfig รับค่าจาก popup ยืนยันตัวตนผ่าน NDID (bls-ndid-verify)
     // ใช้เช็ค ndidConfig.ndidVerifySuccess เป็นเงื่อนไขเดียวของปุ่ม "ถัดไป" ใน step 2 (แทนที่
     // identifyConfig เดิม - DOPA/OCR/Selfie ไม่เกี่ยวข้องกับการกดถัดไปแล้วตาม requirment ล่าสุด)
+    // หมายเหตุ (requirment ใหม่) : ไม่ได้ใช้เป็นเงื่อนไขหลักแล้ว เปลี่ยนไปใช้ verifyIdentityConfig ด้านล่างแทน
+    // แต่ยังคง prop นี้ไว้ ไม่ได้ลบ
     ndidConfig: {
             type: Object,
             default: () => ({})
+        },
+    // add on : requirment - เว็บยืนยันตัวตนใหม่ (แทนที่ popup NDID เดิม) รับจาก BlsFundApplication.vue
+    // sync มาจาก blade ผ่าน bus.$on('verify-identity-config-updated', ...)
+    verifyIdentityConfig: {
+            type: Object,
+            default: () => ({ verified: false })
         },
 
     values: {
@@ -2272,10 +2271,11 @@ export default {
 
         return (this.identifyConfig && (this.identifyConfig.identifyFaceDatetime && this.identifyConfig.identifyDopaDatetime));
     },
-    // add on : requirment - เงื่อนไขเดียวของปุ่ม "ถัดไป" ใน step 2 หลังเปลี่ยนมาใช้ NDID
-    // (ตัด identifyConfig เดิม/isIdentifyComplted ออกจากการกดถัดไปแล้ว)
+    // add on : requirment - เงื่อนไขเดียวของปุ่ม "ถัดไป" ใน step 2 - เดิมเช็คจาก ndidConfig.ndidVerifySuccess
+    // (popup NDID) ตอนนี้เปลี่ยนไปเช็ค verifyIdentityConfig.verified (เว็บยืนยันตัวตนใหม่) แทน คงชื่อ
+    // computed property เดิมไว้ (isNdidVerifySuccess) เพราะยังใช้ gate ปุ่ม "ถัดไป" อยู่ ไม่เปลี่ยนชื่อ
     isNdidVerifySuccess() {
-      return !!(this.ndidConfig && this.ndidConfig.ndidVerifySuccess === true);
+      return !!(this.verifyIdentityConfig && this.verifyIdentityConfig.verified === true);
     },
     suitVersion() {
       return process.env.VUE_APP_SUIT_VERSION;
@@ -2904,16 +2904,18 @@ export default {
         console.warn("onclickShowIdentifyApp is not loaded yet.");
       }
     },
-    // add on : requirment - step 2 (seg / omn+seg)  เปลี่ยนจากยืนยันตัวตนแบบใบหน้า , ocr เป็น ndid
+    // add on : requirment - step 2 (seg / omn+seg) เลิกใช้ popup NDID เดิม (onClickShowNdidVerify) แล้ว
+    // เปลี่ยนไปเปิดเว็บยืนยันตัวตนใหม่แทน (onClickShowVerifyIdentityWebsite ประกาศไว้ใน
+    // fund-application-new_blade.php) คงชื่อ method เดิมไว้ (onClickVerifyNDID) เพื่อลดความเสี่ยง
     onClickVerifyNDID() {
-      if (window.onClickShowNdidVerify) {
+      if (window.onClickShowVerifyIdentityWebsite) {
         try {
-          window.onClickShowNdidVerify();
+          window.onClickShowVerifyIdentityWebsite();
         } catch (err) {
-          console.error("Error when calling NDID Verify App:", err);
+          console.error("Error when calling verify identity website:", err);
         }
       } else {
-        console.warn("onClickShowNdidVerify is not loaded yet.");
+        console.warn("onClickShowVerifyIdentityWebsite is not loaded yet.");
       }
     },
     onClickPrev() {

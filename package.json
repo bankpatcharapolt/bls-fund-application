@@ -11,12 +11,6 @@
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
-		"@innovatrics/dot-auto-capture-ui": "^7.2.1",
-		"@innovatrics/dot-document-auto-capture": "^7.2.1",
-		"@innovatrics/dot-face-auto-capture": "^7.2.1",
-		"@innovatrics/dot-magnifeye-liveness": "^7.2.1",
-		"@innovatrics/dot-palm-capture": "^7.2.1",
-		"@innovatrics/dot-smile-liveness": "^7.2.1",
 		"await-to-js": "^2.1.1",
 		"axios": "^0.19.2",
 		"core-js": "^3.6.5",

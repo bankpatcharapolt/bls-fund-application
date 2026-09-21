@@ -420,11 +420,17 @@
               >ยันยันตัวตน</label
             >
             <div class="col-sm-7 col-sm-6">
+              <!--
+                add on : requirment - เลิกใช้ bls identify application เดิม (identifyConfig.identifyFaceDatetime/
+                identifyDopaDatetime) เป็นเงื่อนไขสถานะ/ปุ่มนี้แล้ว เปลี่ยนไปเช็ค verifyIdentityConfig.verified
+                (เว็บยืนยันตัวตนใหม่) แทน - identifyConfig ยังคงถูกใช้ที่อื่นในไฟล์นี้ (ข้อมูล customerDetail
+                ตอนบันทึก) จึงไม่ได้ลบ prop นี้ออก แค่ไม่ใช้เป็นเงื่อนไขตรงนี้แล้ว
+              -->
               <div class="upload-status-container">
                 <span
                   class="info-text success"
                   style="font-weight: bold"
-                  v-if="(identifyConfig && identifyConfig.identifyFaceDatetime && identifyConfig.identifyDopaDatetime)"
+                  v-if="this.isIdentifyComplted"
                 >
                   <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
                   ทำการยืนยันตัวตนเรียบร้อยแล้ว
@@ -444,7 +450,7 @@
               <button 
                 type="button"
                 class="btn btn-labeled btn-primary"
-                v-if="(!identifyConfig || (identifyConfig && (!identifyConfig.identifyFaceDatetime || !identifyConfig.identifyDopaDatetime)))"
+                v-if="!this.isIdentifyComplted"
                 @click="onClickVerify"
               >
                 <span class="btn-label">
@@ -797,6 +803,12 @@ export default {
             type: Object,
             default: () => ({})
         },
+    // add on : requirment - เว็บยืนยันตัวตนใหม่ (แทนที่ bls identify application เดิม) รับจาก
+    // BlsFundApplication.vue sync มาจาก blade (verify-identity-config-updated ผ่าน bus)
+    verifyIdentityConfig: {
+            type: Object,
+            default: () => ({ verified: false })
+        },
   },
 
   data() { 
@@ -856,8 +868,11 @@ export default {
   },
 
   computed: {
+    // add on : requirment - เดิมเช็คจาก identifyConfig (bls identify application เดิม) ตอนนี้เปลี่ยนไปเช็ค
+    // verifyIdentityConfig.verified (เว็บยืนยันตัวตนใหม่) แทน - คงชื่อ computed property เดิมไว้ (isIdentifyComplted)
+    // เพราะยังใช้ gate ปุ่ม submit ที่บรรทัด ~712/725 อยู่ ไม่ได้ลบ/เปลี่ยนชื่อเพื่อลดความเสี่ยง
      isIdentifyComplted(){
-        return (this.identifyConfig && this.identifyConfig.identifyFaceDatetime && this.identifyConfig.identifyDopaDatetime) ;
+        return !!(this.verifyIdentityConfig && this.verifyIdentityConfig.verified) ;
     },
     contractUrl() {
       let taskType;
@@ -961,21 +976,18 @@ export default {
   },
 
   methods: {
+    // add on : requirment - เลิกใช้ bls identify application เดิม (onclickShowIdentifyApp) เปลี่ยนไปเปิด
+    // เว็บยืนยันตัวตนใหม่แทน (onClickShowVerifyIdentityWebsite ประกาศไว้ใน fund-application-new_blade.php)
+    // ไม่ต้องส่ง taskType อีกต่อไป (เว็บใหม่ไม่ได้แยก flow ตาม isNewCustCode แบบเดิม)
        async onClickVerify() {
-      if (window.onclickShowIdentifyApp) {
+      if (window.onClickShowVerifyIdentityWebsite) {
         try {
-           let taskType;
-           if(this.values?.isNewCustCode){
-            taskType = "3";
-          }else{
-            taskType = "4";
-          }
-          await window.onclickShowIdentifyApp(taskType);
+          await window.onClickShowVerifyIdentityWebsite();
         } catch (err) {
-          console.error("Error when calling Identify App:", err);
+          console.error("Error when calling verify identity website:", err);
         }
       } else {
-        console.warn("onclickShowIdentifyApp is not loaded yet.");
+        console.warn("onClickShowVerifyIdentityWebsite is not loaded yet.");
       }
     },
     getFieldClass(fieldname) {
